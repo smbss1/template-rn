@@ -50,4 +50,7 @@ export default {
         notifications: 'Notifications',
         no_notifications: 'Auncune notification',
     },
+    home: {
+        news: 'Actualité'
+    }
 }

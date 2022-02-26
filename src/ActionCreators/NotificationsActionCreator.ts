@@ -1,31 +1,26 @@
-import * as actions from '@/ActionTypes/NotificationsActionTypes'
-import { Notification } from '@/Models'
+import * as actions from '@/ActionTypes/NewsActionTypes'
+import { News } from '@/Models'
 
-export function getNotifications(
-    page: number,
-    limit: number,
-): actions.GetNotificationsAction {
+export function getNews() : actions.GetNewsAction {
     return {
-        type: actions.GET_NOTIFICATIONS,
-        page,
-        limit,
+        type: actions.GET_NEWS,
     }
 }
 
-export function getNotificationsSuccess(
-    notifications: Notification[],
-): actions.GetNotificationsSuccessAction {
+export function getNewsSuccess(
+    news: News[],
+): actions.GetNewsSuccessAction {
     return {
-        type: actions.GET_NOTIFICATIONS_SUCCESS,
-        notifications,
+        type: actions.GET_NEWS_SUCCESS,
+        news,
     }
 }
 
-export function getNotificationsFailure(
+export function getNewsFailure(
     error: Error | string,
-): actions.GetNotificationsFailureAction {
+): actions.GetNewsFailureAction {
     return {
-        type: actions.GET_NOTIFICATIONS_FAILURE,
+        type: actions.GET_NEWS_FAILURE,
         error,
     }
 }

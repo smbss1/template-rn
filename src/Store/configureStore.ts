@@ -3,16 +3,16 @@ import createSagaMiddleware from 'redux-saga'
 
 import rootReducer from '@/Reducers/RootReducer'
 import rootSaga from '@/Sagas/RootSaga'
-import { LyricsState } from '@/reducers/LyricsReducer'
-import { AuthState } from '@/reducers/AuthReducer'
-import { NotificationsState } from '@/reducers/NotificationsReducer'
+import { LyricsState } from '@/Reducers/LyricsReducer'
+import { AuthState } from '@/Reducers/AuthReducer'
+import { NewsState } from '@/Reducers/NewsReducer'
 
 const sagaMiddleware = createSagaMiddleware()
 
 export interface StoreState {
     lyrics: LyricsState
     auth: AuthState
-    notifications: NotificationsState
+    news: NewsState
 }
 
 const configureStore = () => {

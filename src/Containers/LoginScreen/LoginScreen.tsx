@@ -5,12 +5,11 @@ import Fonts from '@/Theme/FontsTypes'
 import styles from './LoginScreenStyles'
 import { BasicButton } from '@/Components'
 import { useTranslation } from 'react-i18next'
-import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
-import * as actionTypes from '@/ActionTypes/AuthActionTypes'
+import { TextInput } from 'react-native-gesture-handler'
 import Tools from '@/Tools/Tools'
 import { connect } from "react-redux";
 import { StoreState } from '@/Store/configureStore'
-import { login, loginFailure, register } from '@/ActionCreators/AuthActionCreator'
+import { login } from '@/ActionCreators/AuthActionCreator'
 import * as Animatable from 'react-native-animatable'
 import Toast from 'react-native-toast-message'
 import { Colors } from '@/Theme'
@@ -20,10 +19,7 @@ const LoginScreen = (props: any) => {
     const {
         isLoading,
         error,
-        token,
-        refreshToken,
         dispatchLogin,
-        dispatchRegister
     } = props;
 
     useEffect(() => {
@@ -41,9 +37,8 @@ const LoginScreen = (props: any) => {
     const [email, onChangeEmail] = React.useState("");
     const [password, onChangePassword] = React.useState("");
     const [inputError, setError] = React.useState(false);
-    
 
-    // dispatchRegister("samuel.besseau@epitech.eu", "samuel")
+    
     const onEndEditingEmail = () => {    
         if (!Tools.isEmail(email))
         {
@@ -154,7 +149,6 @@ const mapStateToProps = (state: StoreState) => {
 const mapDispatchToProps = (dispatch: Dispatch<any>) => {
     return {
         dispatchLogin: (email: string, password: string) => dispatch(login(email, password)),
-        dispatchRegister: (email: string, password: string) => dispatch(register(email, password)),
     };
 };
 

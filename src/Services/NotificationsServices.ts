@@ -1,14 +1,11 @@
 import api from '@/Services'
 
-interface notificationsResponse {
+interface newsResponse {
     data: Object
 }
 
-export async function fetchNotifications(
-    page: number,
-    limit: number,
-): Promise<notificationsResponse> {
-    const response = await api.get(`/alerts?page=${page}&limit=${limit}`)
+export async function fetchNews() : Promise<newsResponse> {
+    const response = await api.get(`/news`)
 
     return response
 }
