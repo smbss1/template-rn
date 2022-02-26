@@ -21,6 +21,10 @@ const Common = {
             marginBottom: 10,
         },
         basicShadow: {
+            // Only works on Android
+            elevation: 10,
+
+            // Only works on IOS
             shadowColor: Colors.basicShadow,
             shadowOpacity: 0.15,
             shadowOffset: { width: 0, height: 3 },

@@ -5,12 +5,12 @@ import * as actionTypes from '@/ActionTypes/AuthActionTypes'
 
 import api from '@/Services'
 
-function* loginCall({ username, password, udid }: actionTypes.LoginAction) {
+function* loginCall({ email, password }: actionTypes.LoginAction) {
     const params = {
-        username: username,
+        email: email,
         password: password,
-        udid: udid,
     }
+
     try {
         const { data } = yield call(fetchLogin, params)
         api.defaults.headers = {
@@ -18,6 +18,7 @@ function* loginCall({ username, password, udid }: actionTypes.LoginAction) {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${data.token}`,
         }
+
         yield put(actionCreators.loginSuccess(data.token, data.refreshToken))
     } catch (error) {
         yield put(actionCreators.loginFailure(error))
@@ -25,28 +26,17 @@ function* loginCall({ username, password, udid }: actionTypes.LoginAction) {
 }
 
 function* registerCall({
-    username,
-    password,
-    firstname,
-    lastname,
-    udid,
+    email,
+    password
 }: actionTypes.RegisterAction) {
     const params = {
-        username: username,
+        email: email,
         password: password,
-        firstname: firstname,
-        lastname: lastname,
-        udid: udid,
     }
     try {
-        const { data } = yield call(fetchRegister, params)
-        const { user, token, refreshToken } = data
-        api.defaults.headers = {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${data.token}`,
-        }
-        yield put(actionCreators.registerSuccess(token, refreshToken, user))
+        yield call(fetchRegister, params)
+
+        yield put(actionCreators.registerSuccess())
     } catch (error) {
         yield put(actionCreators.registerFailure(error))
     }

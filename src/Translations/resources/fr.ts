@@ -27,6 +27,8 @@ export default {
         reset_password: 'Réinitialiser mon mot de passe',
         firstname: 'Prénom',
         lastname: 'Nom',
+
+        login_error: 'Adresse Mail/Mot de passe incorrect',
     },
     verification: {
         input_minimum_length: 'Il doit comporter au moins 2 caractères.',
@@ -34,6 +36,7 @@ export default {
             'Il doit comporter entre 8 et 25 caractères dont un chiffre, une lettre et un caractère spécial.',
         password_minimum_length:
             'Il doit comporter au moins %{length} caractères.',
+        email_title: 'Adresse mail Incorrecte',
         check_email: 'Vérifiez l’adresse mail. Celle-ci n’est pas valide.',
         check_phone:
             'Vérifiez le numéro de téléphone. Celui-ci n’est pas valide.',
