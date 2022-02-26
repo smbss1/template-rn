@@ -9,10 +9,11 @@ import { TextInput } from 'react-native-gesture-handler'
 import Tools from '@/Tools/Tools'
 import { connect } from "react-redux";
 import { StoreState } from '@/Store/configureStore'
-import { login } from '@/ActionCreators/AuthActionCreator'
+import { login, refreshTokenAction } from '@/ActionCreators/AuthActionCreator'
 import * as Animatable from 'react-native-animatable'
 import Toast from 'react-native-toast-message'
 import { Colors } from '@/Theme'
+import EncryptedStorage from 'react-native-encrypted-storage';
 
 const LoginScreen = (props: any) => {
 
@@ -20,9 +21,22 @@ const LoginScreen = (props: any) => {
         isLoading,
         error,
         dispatchLogin,
+        dispatchRefreshToken
     } = props;
 
     useEffect(() => {
+
+        // If we login previously, so try to get a new token
+        EncryptedStorage.getItem("refreshToken")
+            .then((refreshToken) => {
+
+                if (refreshToken)
+                {
+                    dispatchRefreshToken(refreshToken);
+                }
+            })
+        
+        // Show the error message, only when we get one
         if (error)
         {
             Toast.show({
@@ -38,7 +52,10 @@ const LoginScreen = (props: any) => {
     const [password, onChangePassword] = React.useState("");
     const [inputError, setError] = React.useState(false);
 
-    
+
+    /**
+     * @brief Check the syntax of the email when the user finishes typing
+     */
     const onEndEditingEmail = () => {    
         if (!Tools.isEmail(email))
         {
@@ -56,19 +73,32 @@ const LoginScreen = (props: any) => {
         }
     }
 
+    /**
+     * @brief This function is called when we press the login button.
+     * It dispatch an 'AuthActionTypes/LOGIN' type.
+     */
     const onClickToLogin = () => {
         dispatchLogin(email, password);
     }
 
     return (
         <View style={[Common.basicPage]}>
+
             <Image source={Images.loginBackground} style={styles.backgroundImage}/>
+            
+            {/* Content Container */}
             <Animatable.View style={styles.contentContainer} animation="slideInUp" duration={800}>
-                <Text style={styles.title}>{t('authentification.connection')}</Text>
+                
+                {/* Title */}
+                <Text style={styles.title}>
+                    {t('authentification.connection')}
+                </Text>
 
+                {/* Form */}
                 <View style={styles.content}>
-
                     <View style={styles.fieldContainer}>
+
+                        {/* Email Input */}
                         <Field
                             sectionText={t('authentification.mail')}
                             containerStyle={styles.mailContainer}
@@ -76,6 +106,7 @@ const LoginScreen = (props: any) => {
                             onEndEditing={onEndEditingEmail}
                         />
                         
+                        {/* Password Input */}
                         <Field
                             sectionText={t('authentification.password')}
                             containerStyle={styles.passwordContainer}
@@ -96,47 +127,35 @@ const LoginScreen = (props: any) => {
                     </View>
                 </View>
             </Animatable.View>
-
         </View>
     );
 }
 
-const Field = (props: any) => {
+interface FieldProp
+{
+    sectionText?: string;
+    containerStyle: any;
+    onChangeText: (text: string) => void;
+    onEndEditing?: () => void;
+}
+
+const Field = (props: FieldProp) => {
 
     const {
         sectionText,
         containerStyle,
         onChangeText,
         onEndEditing,
-        children
     } = props;
 
     return (
         <View style={containerStyle}>
             <Text style={styles.sectionTitle}>{sectionText}</Text>
             <TextInput
-                style={[
-                    styles.input,
-                    Common.basicShadow,
-                    {
-                        fontSize: 16,
-                        fontFamily: Fonts.type.light
-                    }
-                ]}
+                style={[ styles.input, Common.basicShadow ]}
                 onChangeText={onChangeText}
                 onEndEditing={onEndEditing}
             />
-
-            {/* { errorMessage ?
-                <Animatable.View style={styles.errorContainer} animation="fadeIn" duration={500} easing="linear">
-                    <Text style={styles.errorMessage}>
-                        {errorMessage}
-                    </Text>
-                </Animatable.View>
-                : null
-            } */}
-
-            {children}
         </View>
     )
 }
@@ -149,6 +168,7 @@ const mapStateToProps = (state: StoreState) => {
 const mapDispatchToProps = (dispatch: Dispatch<any>) => {
     return {
         dispatchLogin: (email: string, password: string) => dispatch(login(email, password)),
+        dispatchRefreshToken: (refreshToken: string) => dispatch(refreshTokenAction(refreshToken)),
     };
 };
 

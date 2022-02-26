@@ -1,5 +1,4 @@
 import * as actions from '@/ActionTypes/AuthActionTypes'
-import { User } from '@/Models'
 
 export function login(
     email: string,
@@ -54,6 +53,32 @@ export function registerFailure(
 ): actions.RegisterFailureAction {
     return {
         type: actions.REGISTER_FAILURE,
+        error,
+    }
+}
+
+export function refreshTokenAction(
+    refreshToken: string,
+): actions.RefreshTokenAction {
+    return {
+        type: actions.REFRESH_TOKEN,
+        refreshToken,
+    }
+}
+
+export function refreshTokenSuccess(token: string, refreshToken: string) : actions.RefreshTokenSuccessAction {
+    return {
+        type: actions.REFRESH_TOKEN_SUCCESS,
+        token,
+        refreshToken
+    }
+}
+
+export function refreshTokenFailure(
+    error: Error | string,
+): actions.RefreshTokenFailureAction {
+    return {
+        type: actions.REFRESH_TOKEN_FAILURE,
         error,
     }
 }

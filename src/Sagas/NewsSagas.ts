@@ -1,6 +1,6 @@
 import { put, call, takeEvery, all, fork } from 'redux-saga/effects'
 import { fetchNews } from '@/Services/NotificationsServices'
-import * as actionCreators from '@/ActionCreators/NotificationsActionCreator'
+import * as actionCreators from '@/ActionCreators/NewsActionCreator'
 import * as actionTypes from '@/ActionTypes/NewsActionTypes'
 
 function* getNewsCall(action: actionTypes.GetNewsAction) {
@@ -9,11 +9,8 @@ function* getNewsCall(action: actionTypes.GetNewsAction) {
             data,
         } = yield call(fetchNews)
 
-        console.log(data)
         yield put(actionCreators.getNewsSuccess(data))
     } catch (error) {
-        console.log(error)
-
         yield put(actionCreators.getNewsFailure(error))
     }
 }

@@ -9,6 +9,8 @@ export default StyleSheet.create({
         backgroundColor: Colors.white,
         paddingLeft: 20,
         borderRadius: Metrics.buttonRadius,
+        fontSize: 16,
+        fontFamily: Fonts.type.light
     },
     contentContainer: {
         width: Metrics.widthPercentageToDP('100%'),

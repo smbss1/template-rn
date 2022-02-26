@@ -38,6 +38,25 @@ export interface RegisterFailureAction {
     error: Error | string
 }
 
+export const REFRESH_TOKEN = 'AuthActionTypes/REFRESH_TOKEN'
+export interface RefreshTokenAction {
+    type: typeof REFRESH_TOKEN
+    refreshToken: string
+}
+
+export const REFRESH_TOKEN_SUCCESS = 'AuthActionTypes/REFRESH_TOKEN_SUCCESS'
+export interface RefreshTokenSuccessAction {
+    type: typeof REFRESH_TOKEN_SUCCESS
+    token: string
+    refreshToken: string
+}
+
+export const REFRESH_TOKEN_FAILURE = 'AuthActionTypes/REFRESH_TOKEN_FAILURE'
+export interface RefreshTokenFailureAction {
+    type: typeof REFRESH_TOKEN_FAILURE
+    error: Error | string
+}
+
 export type AuthActions =
     | LoginAction
     | LoginSuccessAction
@@ -45,3 +64,6 @@ export type AuthActions =
     | RegisterAction
     | RegisterSuccessAction
     | RegisterFailureAction
+    | RefreshTokenAction
+    | RefreshTokenSuccessAction
+    | RefreshTokenFailureAction

@@ -19,3 +19,13 @@ export async function fetchRegister(params: Object): Promise<registerResponse> {
 
     return response
 }
+
+interface refreshTokenResponse {
+    data: Object
+}
+
+export async function fetchRefreshToken(params: Object): Promise<refreshTokenResponse> {
+    const response = await api.post('auth/token/refresh', params)
+
+    return response
+}

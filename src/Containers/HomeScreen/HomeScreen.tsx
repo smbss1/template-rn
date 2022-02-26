@@ -1,17 +1,30 @@
-import React, { Dispatch, useEffect, useRef } from 'react'
+import React, { Dispatch } from 'react'
 import { View, Text, Image, ActivityIndicator, RefreshControl } from 'react-native'
 import { Common, Images } from '@/Theme'
-import Fonts from '@/Theme/FontsTypes'
 import styles from './HomeScreenStyles'
-import { BasicButton } from '@/Components'
 import { useTranslation } from 'react-i18next'
-import { FlatList, TextInput, TouchableOpacity } from 'react-native-gesture-handler'
-import * as actionTypes from '@/ActionTypes/AuthActionTypes'
+import { FlatList, TouchableOpacity } from 'react-native-gesture-handler'
 import Tools from '@/Tools/Tools'
 import { connect } from "react-redux";
 import { StoreState } from '@/Store/configureStore'
 import * as Animatable from 'react-native-animatable'
-import { getNews } from '@/ActionCreators/NotificationsActionCreator'
+import { getNews } from '@/ActionCreators/NewsActionCreator'
+import EncryptedStorage from 'react-native-encrypted-storage';
+import { News } from '@/Models'
+import dayjs from 'dayjs'
+import localizedFormat from 'dayjs/plugin/localizedFormat'
+import updateLocale from 'dayjs/plugin/updateLocale'
+import french from 'dayjs/locale/fr'
+
+dayjs.extend(localizedFormat)
+dayjs.extend(updateLocale)
+
+dayjs.updateLocale('fr', {
+    weekdays: [
+        "Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"
+    ],
+    weekdaysShort: ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"]
+})
 
 const HomeScreen = (props: any) => {
 
@@ -21,63 +34,70 @@ const HomeScreen = (props: any) => {
         dispatchGetNews,
     } = props;
 
-
     const { t } = useTranslation();
-    // Indicate if the posts are loading or not
-    const [error, setError] = React.useState("");
 
     const onRefresh = React.useCallback(async () => {
-        dispatchGetNews();
 
-        // reddit.subreddit.mine.home(auth)
-        //   .then((response) => {
-        //     setPosts(response["data"]["children"]);
-        //     setError(false);
-        //   })
-        //   .catch((err) => {
-        //     setError("Error when try get posts");
-        //     setIsError(true);
-        //   })
-        //   .finally(() => {
-        //     setRefreshing(false);
-        //     setLoading(false);
-        //   });
+        // Because we login, we can get the news from API
+        dispatchGetNews();
       }, []);
     
-      // On Component mount
       React.useEffect(() => {
+        // If we login, save the refreshToken
+        EncryptedStorage.setItem("refreshToken", auth.refreshToken)
         onRefresh();
       }, []);
     
     return (
         <View style={[Common.basicPage]}>
-            <Animatable.View animation="slideInLeft" duration={800} style={styles.titleContainer}>
+
+            <Text style={styles.title}>{t('home.news')}</Text>
+
+            <TouchableOpacity>
                 <Image source={Images.leftArrow} style={styles.titleArrow} />
-                <Text style={styles.title}>{t('home.news')}</Text>
-            </Animatable.View>
+            </TouchableOpacity>
 
-            <FlatList
-                data={news.news}
-                keyExtractor={({item}, index) => { return "0" + index; }}
-                renderItem={({item}) => (<Card data={item}/>) }
-                refreshControl={<RefreshControl refreshing={news.isLoading} onRefresh={onRefresh} />}
-            />
-
-            {/* <Animatable.View animation="slideInLeft" duration={800} style={styles.cardContainer}>
-                <Card />
-            </Animatable.View> */}
+            <View style={styles.cardContainer}>
+                <FlatList
+                    contentContainerStyle={{ paddingBottom: 20 }}
+                    data={news.news}
+                    keyExtractor={({item}, index) => { return "0" + index; }}
+                    renderItem={({item}) => (<Card news={item}/>) }
+                    refreshControl={<RefreshControl refreshing={news.isLoading} onRefresh={onRefresh} />}
+                />
+            </View>
         </View>
     );
 }
 
-const Card = (props: any) => {
+interface CardProp
+{
+    news: News;
+}
 
-    const { data } = props;
-    
+const Card = (prop: CardProp) => {
+
+    const { id, body, title, date, image } = prop.news;
+
+    const formatedDate = dayjs(date).locale(french).format("ddd D MMMM YYYY");
+
     return (
-        <View style={styles.card}>
-
-        </View>
+        <TouchableOpacity>
+            <Animatable.View
+                style={styles.card}
+                animation="slideInLeft"
+                delay={100 + (id - 1) * 100}
+            >
+                <Image source={{uri: image }} style={styles.cardImage}/>
+                <Text style={styles.cardTitle}>{title}</Text>
+                <View style={styles.cardDateContainer}>
+                    <View style={styles.cardDateBackground} />
+                    <Text style={styles.cardDate}>
+                        {formatedDate}
+                    </Text>
+                </View>
+            </Animatable.View>
+        </TouchableOpacity>
     )
 }
 
