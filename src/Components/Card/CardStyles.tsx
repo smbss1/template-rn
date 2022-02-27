@@ -4,15 +4,6 @@ import { Colors } from '@/Theme'
 import Fonts from '@/Theme/FontsTypes'
 
 export default StyleSheet.create({
-    cardContainer: {
-        width: Metrics.widthPercentageToDP('100%'),
-        // height: Metrics.heightPercentageToDP('100%'),
-        alignItems: 'center',
-        alignSelf: 'center',
-        paddingTop: 30,
-        flex: 1,
-        // paddingBottom: 50
-    },
     card: {
         width: Metrics.widthPercentageToDP('90%'),
         height: Metrics.heightPercentageToDP('27%'),
@@ -20,13 +11,19 @@ export default StyleSheet.create({
         borderRadius: 10,
         backgroundColor: Colors.primary
     },
-    cardImage: {
+    image: {
         flex: 1,
         alignSelf: 'stretch',
         resizeMode: 'cover',
         borderRadius: 10,
     },
-    cardTitle: {
+    overlay: {
+        flex: 1,
+        resizeMode: 'stretch',
+        backgroundColor:'#1741658E',
+        borderRadius: 10,
+    },
+    title: {
         width: '80%',
         fontFamily: Fonts.type.bold,
         fontSize: 18,
@@ -37,7 +34,7 @@ export default StyleSheet.create({
         bottom: 13,
         lineHeight: 21,
     },
-    cardDateContainer: {
+    dateContainer: {
         width: Metrics.widthPercentageToDP('35%'),
         height: 25,
         borderRadius: 17,
@@ -46,7 +43,7 @@ export default StyleSheet.create({
         right: 10,
         top: 8,
     },
-    cardDateBackground: {
+    dateBackground: {
         width: Metrics.widthPercentageToDP('35%'),
         height: 25,
         backgroundColor: '#071D2F',
@@ -56,28 +53,11 @@ export default StyleSheet.create({
         right: 0,
         top: 0,
     },
-    cardDate: {
+    date: {
         textAlign: 'center',
         opacity: 1,
         color: Colors.white,
         fontFamily: Fonts.type.medium,
         fontSize: 11,
-    },
-    titleContainer: {
-        // width: '100%',
-        justifyContent: 'center',
-        // flexDirection: 'row'
-    },
-    title: {
-        fontFamily: Fonts.type.bold,
-        fontSize: 26,
-        textAlign: 'center',
-        color: Colors.text,
-    },
-    titleArrow: {
-        // alignSelf: 'center',
-        position: 'relative',
-        left: 7,
-        top: 0
     },
 })

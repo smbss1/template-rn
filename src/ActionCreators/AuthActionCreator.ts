@@ -11,6 +11,12 @@ export function login(
     }
 }
 
+export function logout() : actions.LogoutAction {
+    return {
+        type: actions.LOGOUT,
+    }
+}
+
 export function loginSuccess(
     token: string,
     refreshToken: string,

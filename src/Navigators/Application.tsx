@@ -5,7 +5,7 @@ import { navigationRef } from '@/Navigators/Root'
 import { StatusBar, Text, View } from 'react-native'
 import Layout from '@/Theme/Layout'
 import MainNavigator from '@/Navigators/Main'
-import HomeNavigator from '@/Navigators/Home'
+import NewsNavigator from '@/Navigators/News'
 import Toast from 'react-native-toast-message'
 import ToastConfig from '@/Config/Toast'
 import { connect } from 'react-redux'
@@ -34,8 +34,8 @@ const ApplicationNavigator = (props: any) => {
                     :
                     // User is login
                     <Stack.Screen
-                        name="Home"
-                        component={HomeNavigator}
+                        name="News"
+                        component={NewsNavigator}
                         options={{
                             animationEnabled: false,
                         }}
