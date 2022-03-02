@@ -1,43 +1,36 @@
 import React, { Dispatch, ReactNode, useEffect, useRef } from 'react'
-import { View, Image, ActivityIndicator, Text, StyleSheet } from 'react-native'
+import { View, Image, ActivityIndicator, TextInputProps, StyleSheet, Text } from 'react-native'
 import { Common, Images } from '@/Theme'
-import styles from './LoginScreenStyles'
-import animations from './LoginScreenAnimation'
+import styles from './RegisterScreenStyles'
+import animations from './RegisterScreenAnimation'
 import { BasicButton, Field } from '@/Components'
 import { useTranslation } from 'react-i18next'
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import Tools from '@/Tools/Tools'
 import { connect } from "react-redux";
 import { StoreState } from '@/Store/configureStore'
-import { login, refreshTokenAction, resetAuthError } from '@/ActionCreators/AuthActionCreator'
+import { register, resetAuthError } from '@/ActionCreators/AuthActionCreator'
 import * as Animatable from 'react-native-animatable'
 import Toast from 'react-native-toast-message'
 import { Colors } from '@/Theme'
-import EncryptedStorage from 'react-native-encrypted-storage';
 import { navigateAndSimpleReset } from '@/Navigators/Root'
 
-const LoginScreen = (props: any) => {
+const RegisterScreen = (props: any) => {
 
     const {
         isLoading,
         error,
-        dispatchLogin,
-        dispatchRefreshToken,
+        dispatchRegister,
         dispatchResetAuthError
     } = props;
 
     // Run this, only when the component is mounted
     useEffect(() => {
-        // If we login previously, so try to get a new token
-        EncryptedStorage.getItem("refreshToken")
-            .then((refreshToken) => {
-
-                if (refreshToken)
-                {
-                    dispatchRefreshToken(refreshToken);
-                }
-            })
-    }, [])
+        if (!isLoading && !error && email && password)
+        {
+            console.log("Register Success")
+        }
+    }, [isLoading])
 
     useEffect(() => {
         // Show the error message, only when we get one
@@ -45,53 +38,78 @@ const LoginScreen = (props: any) => {
         {
             Toast.show({
                 type: 'error',
-                text1: t('authentification.login_error'),
+                text1: t('authentification.register_error'),
+                text2: t('authentification.account_exist')
             })
-            dispatchResetAuthError();
+            dispatchResetAuthError()
         }
     }, [error])
 
     const { t } = useTranslation();
-    const [email, onChangeEmail] = React.useState("");
-    const [password, onChangePassword] = React.useState("");
-    const [inputError, setError] = React.useState(false);
+    const [email, setEmail] = React.useState("");
+    const [password, setPassword] = React.useState("");
+    const [inputEmailError, setInputEmailError] = React.useState(false);
+    const [inputPasswordError, setInputPasswordError] = React.useState(false);
     const [hidePassword, setHidePassword] = React.useState(true);
 
+    /**
+     * @brief Check the syntax of the email when the user is typing
+     */
+    const onChangeEmail = (text: string) => {    
+        setInputEmailError(!Tools.isEmail(text));
+        setEmail(text);
+    }
 
     /**
-     * @brief Check the syntax of the email when the user finishes typing
+     * @brief Check the input of the password when the user finishes typing
+     */
+    const onChangePassword = (text: string) => {    
+        setInputPasswordError(!Tools.isValidPass(text));
+        setPassword(text);
+    }
+
+    /**
+     * @brief Show a Toast Error if the email is incorrect
      */
     const onEndEditingEmail = () => {    
-        if (!Tools.isEmail(email))
+        if (inputEmailError)
         {
-            setError(true);
-
             Toast.show({
                 type: 'error',
                 text1: t('verification.email_title'),
                 text2: t('verification.check_email'),
             });
         }
-        else
+    }
+
+    /**
+     * @brief Show a Toast Error if the password is incorrect
+     */
+     const onEndEditingPassword = () => {    
+        if (inputPasswordError)
         {
-            setError(false);
+            Toast.show({
+                type: 'error',
+                text1: t('verification.password_title'),
+                text2: t('verification.password_minimums'),
+            });
         }
     }
 
     /**
-     * @brief This function is called when we press on the login button.
-     * It dispatch an 'AuthActionTypes/LOGIN' type.
+     * @brief This function is called when we press on the register button.
+     * It dispatch an 'AuthActionTypes/REGISTER' type.
      */
-    const onClickToLogin = () => {
-        dispatchLogin(email, password);
+    const onClickToRegister = () => {
+        dispatchRegister(email, password);
     }
 
     /**
      * @brief This function is called when we press on the no account button.
-     * It navigate to register screen
+     * It navigate to login screen
      */
-    const onPressNoAccount = () => {
-        navigateAndSimpleReset("RegisterScreen")
+     const onPressIHaveAccount = () => {
+        navigateAndSimpleReset("LoginScreen")
     }
 
     return (
@@ -104,7 +122,7 @@ const LoginScreen = (props: any) => {
                 
                 {/* Title */}
                 <Animatable.Text style={styles.title} animation="fadeIn" duration={200} delay={animations.DURATION}>
-                    {t('authentification.connection')}
+                    {t('authentification.registration')}
                 </Animatable.Text>
 
                 {/* Form */}
@@ -128,6 +146,7 @@ const LoginScreen = (props: any) => {
                             title={t('authentification.password')}
                             containerStyle={styles.passwordContainer}
                             onChangeText={onChangePassword}
+                            onEndEditing={onEndEditingPassword}
                             delay={animations.DURATION * 2}
                             secureTextEntry={hidePassword}
                             returnKeyType = {"next"}
@@ -147,11 +166,11 @@ const LoginScreen = (props: any) => {
                         </Field>
                     </View>
 
-                    <TouchableOpacity onPress={onPressNoAccount}>
+                    <TouchableOpacity onPress={onPressIHaveAccount}>
                         <Animatable.Text
-                            style={styles.noAccountText}
+                            style={styles.haveAccountText}
                             animation="fadeIn" delay={animations.DURATION * 2 + 1200}>
-                            {t('authentification.no_account')}
+                            {t('authentification.have_account')}
                         </Animatable.Text>
                     </TouchableOpacity>
 
@@ -165,9 +184,9 @@ const LoginScreen = (props: any) => {
                             <ActivityIndicator color={Colors.primary} size={50} />
                             :
                             <BasicButton
-                                disabled={inputError || !email || !password}
-                                text={t('authentification.connect')}
-                                onPress={onClickToLogin}
+                                disabled={inputEmailError || inputPasswordError || !email || !password}
+                                text={t('authentification.register')}
+                                onPress={onClickToRegister}
                             />
                         }
                     </Animatable.View>
@@ -183,10 +202,9 @@ const mapStateToProps = (state: StoreState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch<any>) => {
     return {
-        dispatchLogin: (email: string, password: string) => dispatch(login(email, password)),
-        dispatchRefreshToken: (refreshToken: string) => dispatch(refreshTokenAction(refreshToken)),
+        dispatchRegister: (email: string, password: string) => dispatch(register(email, password)),
         dispatchResetAuthError: () => dispatch(resetAuthError()),
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(RegisterScreen);

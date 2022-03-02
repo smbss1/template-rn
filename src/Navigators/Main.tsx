@@ -1,6 +1,7 @@
 import React from 'react'
 import { createStackNavigator, StackNavigationOptions } from '@react-navigation/stack'
 import { LoginScreen } from '@/Containers'
+import { RegisterScreen } from '@/Containers'
 import { createSharedElementStackNavigator } from 'react-navigation-shared-element'
 
 // const LoginStack = createStackNavigator()
@@ -29,6 +30,7 @@ const MainNavigator = () => {
     return (
         <LoginStack.Navigator screenOptions={{ headerShown: false }}>
             <LoginStack.Screen name="LoginScreen" component={LoginScreen} options={() => options} />
+            <LoginStack.Screen name="RegisterScreen" component={RegisterScreen} options={() => options} />
         </LoginStack.Navigator>
     )
 }

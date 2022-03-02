@@ -88,3 +88,9 @@ export function refreshTokenFailure(
         error,
     }
 }
+
+export function resetAuthError(): actions.ResetAuthErrorAction {
+    return {
+        type: actions.RESET_AUTH_ERROR,
+    }
+}

@@ -14,6 +14,8 @@ export default {
     },
     authentification: {
         connection: 'Connexion',
+        registration: 'Inscription',
+        register: 'S\'enregistrer',
         connect: 'Se connecter',
         signUp: "S'inscrire",
         inscription: 'Inscription',
@@ -21,6 +23,7 @@ export default {
         mail: 'Adresse mail',
         forget_password: 'Mot de passe oublié ?',
         no_account: 'Pas encore de compte ?',
+        have_account: 'J\'ai un compte ?',
         address: 'Adresse',
         wish_reset_password:
             'Souhaitez-vous réinitialiser votre mot de passe ?',
@@ -29,6 +32,8 @@ export default {
         lastname: 'Nom',
 
         login_error: 'Adresse Mail/Mot de passe incorrect',
+        register_error: 'Erreur de connexion',
+        account_exist: 'Un compte avec la même adresse mail existe déjà',
     },
     verification: {
         input_minimum_length: 'Il doit comporter au moins 2 caractères.',
@@ -37,6 +42,7 @@ export default {
         password_minimum_length:
             'Il doit comporter au moins %{length} caractères.',
         email_title: 'Adresse mail Incorrecte',
+        password_title: 'Mot de passe Incorrect',
         check_email: 'Vérifiez l’adresse mail. Celle-ci n’est pas valide.',
         check_phone:
             'Vérifiez le numéro de téléphone. Celui-ci n’est pas valide.',

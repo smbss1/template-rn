@@ -77,6 +77,11 @@ export default function authReducer(
             isLoading: false,
             error: action.error,
         }
+    case actions.RESET_AUTH_ERROR:
+        return {
+            isLoading: false,
+            error: null,
+        }
     default:
         return state
     }

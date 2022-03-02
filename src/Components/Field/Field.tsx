@@ -40,7 +40,6 @@ const Field = (props: Props) => {
         containerStyle,
         onChangeText,
         onEndEditing,
-        enabled,
         delay,
         secureTextEntry,
         children,
@@ -71,7 +70,6 @@ const Field = (props: Props) => {
                     // style={[ styles.input, Common.basicShadow ]}
                     onChangeText={onChangeText}
                     onEndEditing={onEndEditing}
-                    enabled={enabled}
                     secureTextEntry={secureTextEntry}
                     autoCompleteType={autoCompleteType}
                     keyboardType={keyboardType}

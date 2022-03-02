@@ -49,7 +49,7 @@ export default StyleSheet.create({
     passwordContainer: {
         marginTop: 24,
     },
-    noAccountText: {
+    haveAccountText: {
         marginTop: Metrics.heightPercentageToDP('3%'),
         marginBottom: 8,
         width: '100%',

@@ -62,6 +62,11 @@ export interface RefreshTokenFailureAction {
     error: Error | string
 }
 
+export const RESET_AUTH_ERROR = 'AuthActionTypes/RESET_AUTH_ERROR'
+export interface ResetAuthErrorAction {
+    type: typeof RESET_AUTH_ERROR
+}
+
 export type AuthActions =
     | LogoutAction
     | LoginAction
@@ -73,3 +78,4 @@ export type AuthActions =
     | RefreshTokenAction
     | RefreshTokenSuccessAction
     | RefreshTokenFailureAction
+    | ResetAuthErrorAction
