@@ -59,4 +59,8 @@ export default StyleSheet.create({
         color: Colors.text,
         opacity: 0.7,
     },
+    hidePassword: {
+        ...StyleSheet.absoluteFillObject,
+        resizeMode: 'cover',
+    }
 })

@@ -14,6 +14,7 @@ export default StyleSheet.create({
         fontFamily: Fonts.type.light,
         flexDirection: 'row',
         alignItems: 'center',
+        textAlign: 'left'
     },
     sectionTitle: {
         fontFamily: Fonts.type.medium,

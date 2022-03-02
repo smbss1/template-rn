@@ -132,8 +132,8 @@ const LoginScreen = (props: any) => {
                                 containerStyle={{ position: 'absolute', right: 15 }}
                             >
                                 <Animatable.Image animation="fadeIn" delay={animations.DURATION + 1500}
-                                    source={hidePassword ? Images.invisibleText : Images.visibleText}
-                                    style={{ ...StyleSheet.absoluteFillObject, resizeMode: 'cover' }}
+                                    source={Images.visibleText}
+                                    style={[styles.hidePassword, hidePassword ? { tintColor: Colors.primary } : {}]}
                                 />
                             </TouchableOpacity>
                         </Field>
