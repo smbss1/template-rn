@@ -1,6 +1,6 @@
 import React, { Dispatch } from 'react'
 import { View, RefreshControl } from 'react-native'
-import { Common } from '@/Theme'
+import { Animations, Common } from '@/Theme'
 import styles from './NewsScreenStyles'
 import { useTranslation } from 'react-i18next'
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler'
@@ -13,6 +13,8 @@ import { NavHeader, Card } from '@/Components'
 import { News } from '@/Models'
 import { navigate, navigationRef } from '@/Navigators/Root'
 import * as Animatable from 'react-native-animatable'
+import Lottie from 'lottie-react-native'
+import animations from './NewsScreenAnimations'
 
 const NewsScreen = (props: any) => {
 
@@ -68,20 +70,26 @@ const NewsScreen = (props: any) => {
             {/* Nav Header */}
             <NavHeader title={t('home.news')} onPressBack={onPressBack}/>
 
-            {/* Card List */}
-            <View style={styles.cardContainer}>
-                <FlatList
-                    contentContainerStyle={{ paddingBottom: 30 }}
-                    data={news.news}
-                    keyExtractor={(item) => { return item.id.toString(); }}
-                    collapsable={false}
-                    renderItem={({item}) => renderItem(item)}
-                    showsVerticalScrollIndicator={false}
-                    refreshControl={
-                        <RefreshControl refreshing={news.isLoading} onRefresh={onRefresh} />
-                    }
-                />
-            </View>
+            { !news.isLoading ? (
+                    //  Card List
+                    <View style={styles.cardContainer}>
+                        <FlatList
+                            contentContainerStyle={{ paddingBottom: 30 }}
+                            data={news.news}
+                            keyExtractor={(item) => { return item.id.toString(); }}
+                            collapsable={false}
+                            renderItem={({item}) => renderItem(item)}
+                            showsVerticalScrollIndicator={false}
+                            refreshControl={
+                                <RefreshControl refreshing={news.isLoading} onRefresh={onRefresh} />
+                            }
+                        />
+                    </View>
+                ) : (
+                    <Lottie loop={true} autoPlay={true} source={Animations.loading} style={{ width: 200, height: 200 }}/>
+                )
+            }
+            
         </View>
     );
 }

@@ -122,7 +122,7 @@ const RegisterScreen = (props: any) => {
                 
                 {/* Title */}
                 <Animatable.Text style={styles.title} animation="fadeIn" duration={200} delay={animations.DURATION}>
-                    {t('authentification.registration')}
+                    {t('authentification.inscription')}
                 </Animatable.Text>
 
                 {/* Form */}
@@ -185,7 +185,7 @@ const RegisterScreen = (props: any) => {
                             :
                             <BasicButton
                                 disabled={inputEmailError || inputPasswordError || !email || !password}
-                                text={t('authentification.register')}
+                                text={t('authentification.signUp')}
                                 onPress={onClickToRegister}
                             />
                         }

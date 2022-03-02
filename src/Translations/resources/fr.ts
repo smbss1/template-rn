@@ -14,8 +14,6 @@ export default {
     },
     authentification: {
         connection: 'Connexion',
-        registration: 'Inscription',
-        register: 'S\'enregistrer',
         connect: 'Se connecter',
         signUp: "S'inscrire",
         inscription: 'Inscription',
@@ -23,7 +21,7 @@ export default {
         mail: 'Adresse mail',
         forget_password: 'Mot de passe oublié ?',
         no_account: 'Pas encore de compte ?',
-        have_account: 'J\'ai un compte ?',
+        have_account: 'J\'ai déjà un compte',
         address: 'Adresse',
         wish_reset_password:
             'Souhaitez-vous réinitialiser votre mot de passe ?',
