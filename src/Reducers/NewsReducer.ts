@@ -18,6 +18,7 @@ export default function authReducer(
     state: NewsState = initialState,
     action: actions.NewsActions,
 ): NewsState {
+
     switch (action.type) {
     case actions.GET_NEWS:
         return {

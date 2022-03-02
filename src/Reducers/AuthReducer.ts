@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import * as actions from '@/ActionTypes/AuthActionTypes'
-import { User } from '@/Models'
+
 export interface AuthState {
     isLoading: boolean
     error?: any
@@ -19,6 +19,7 @@ export default function authReducer(
     state: AuthState = initialState,
     action: actions.AuthActions,
 ): AuthState {
+
     switch (action.type) {
     case actions.LOGOUT:
         return {

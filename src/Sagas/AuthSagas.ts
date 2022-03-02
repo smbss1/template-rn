@@ -1,4 +1,4 @@
-import { put, call, takeEvery, all, fork } from 'redux-saga/effects'
+import { put, call, takeEvery, all, fork, takeLatest } from 'redux-saga/effects'
 import { fetchLogin, fetchRegister, fetchRefreshToken } from '@/Services/AuthServices'
 import * as actionCreators from '@/ActionCreators/AuthActionCreator'
 import * as actionTypes from '@/ActionTypes/AuthActionTypes'
@@ -29,6 +29,7 @@ function* registerCall({
     email,
     password
 }: actionTypes.RegisterAction) {
+
     const params = {
         email: email,
         password: password,
@@ -74,7 +75,7 @@ function* refreshTokenCall({
 function* watchOnAuth() {
     yield takeEvery(actionTypes.LOGIN, loginCall)
     yield takeEvery(actionTypes.REGISTER, registerCall)
-    yield takeEvery(actionTypes.REFRESH_TOKEN, refreshTokenCall)
+    yield takeLatest(actionTypes.REFRESH_TOKEN, refreshTokenCall)
 }
 
 export default function* authSagas() {

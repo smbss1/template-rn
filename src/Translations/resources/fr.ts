@@ -52,6 +52,7 @@ export default {
     },
     home: {
         news: 'Actualité',
-        article: 'Article'
+        article: 'Article',
+        share: 'Partager',
     }
 }

@@ -15,7 +15,7 @@ const NavHeader = ({ title, onPressBack }: Props) => {
         <View style={styles.headerContainer}>
 
             {/* Back Arrow */}
-            <TouchableOpacity onPress={onPressBack}>
+            <TouchableOpacity onPress={onPressBack} style={styles.arrow}>
                 <Image source={Images.leftArrow} />
             </TouchableOpacity>
 

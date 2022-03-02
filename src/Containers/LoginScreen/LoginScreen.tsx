@@ -1,8 +1,8 @@
 import React, { Dispatch, useEffect, useRef } from 'react'
-import { View, Text, Image, ActivityIndicator } from 'react-native'
+import { View, Text, Image, ActivityIndicator, TextInputProps } from 'react-native'
 import { Common, Images } from '@/Theme'
-import Fonts from '@/Theme/FontsTypes'
 import styles from './LoginScreenStyles'
+import animations from './LoginScreenAnimation'
 import { BasicButton } from '@/Components'
 import { useTranslation } from 'react-i18next'
 import { TextInput } from 'react-native-gesture-handler'
@@ -24,8 +24,8 @@ const LoginScreen = (props: any) => {
         dispatchRefreshToken
     } = props;
 
+    // Run this, only when the component is mounted
     useEffect(() => {
-
         // If we login previously, so try to get a new token
         EncryptedStorage.getItem("refreshToken")
             .then((refreshToken) => {
@@ -35,7 +35,9 @@ const LoginScreen = (props: any) => {
                     dispatchRefreshToken(refreshToken);
                 }
             })
-        
+    }, [])
+
+    useEffect(() => {
         // Show the error message, only when we get one
         if (error)
         {
@@ -87,12 +89,12 @@ const LoginScreen = (props: any) => {
             <Image source={Images.loginBackground} style={styles.backgroundImage}/>
             
             {/* Content Container */}
-            <Animatable.View style={styles.contentContainer} animation="slideInUp" duration={800}>
+            <Animatable.View style={styles.contentContainer} animation="slideInUp" duration={animations.DURATION}>
                 
                 {/* Title */}
-                <Text style={styles.title}>
+                <Animatable.Text style={styles.title} animation="fadeIn" duration={200} delay={animations.DURATION}>
                     {t('authentification.connection')}
-                </Text>
+                </Animatable.Text>
 
                 {/* Form */}
                 <View style={styles.content}>
@@ -100,21 +102,28 @@ const LoginScreen = (props: any) => {
 
                         {/* Email Input */}
                         <Field
-                            sectionText={t('authentification.mail')}
+                            title={t('authentification.mail')}
                             containerStyle={styles.mailContainer}
                             onChangeText={onChangeEmail}
                             onEndEditing={onEndEditingEmail}
+                            enabled={!isLoading}
+                            delay={animations.DURATION}
+                            autoCompleteType={'email'}
+                            keyboardType={'email-address'}
                         />
                         
                         {/* Password Input */}
                         <Field
-                            sectionText={t('authentification.password')}
+                            title={t('authentification.password')}
                             containerStyle={styles.passwordContainer}
                             onChangeText={onChangePassword}
+                            enabled={!isLoading}
+                            delay={animations.DURATION * 2}
+                            secureTextEntry={true}
                         />
                     </View>
 
-                    <View style={styles.buttonContainer}>
+                    <Animatable.View style={styles.buttonContainer} animation={animations.connectBtn} duration={1000} delay={animations.DURATION * 2 + 300}>
                         { isLoading ?
                             <ActivityIndicator color={Colors.primary} size={50} />
                             :
@@ -124,38 +133,49 @@ const LoginScreen = (props: any) => {
                                 onPress={onClickToLogin}
                             />
                         }
-                    </View>
+                    </Animatable.View>
                 </View>
             </Animatable.View>
         </View>
     );
 }
 
-interface FieldProp
+interface FieldProp extends TextInputProps
 {
-    sectionText?: string;
+    title?: string;
     containerStyle: any;
-    onChangeText: (text: string) => void;
-    onEndEditing?: () => void;
+    enabled?: boolean;
+    delay: number;
 }
 
 const Field = (props: FieldProp) => {
 
     const {
-        sectionText,
+        title,
         containerStyle,
         onChangeText,
         onEndEditing,
+        enabled,
+        delay,
+        secureTextEntry
     } = props;
 
     return (
         <View style={containerStyle}>
-            <Text style={styles.sectionTitle}>{sectionText}</Text>
-            <TextInput
-                style={[ styles.input, Common.basicShadow ]}
-                onChangeText={onChangeText}
-                onEndEditing={onEndEditing}
-            />
+            <Animatable.Text style={styles.sectionTitle} animation={animations.inputTitle} duration={600} delay={delay}>
+                {title}
+            </Animatable.Text>
+
+            <Animatable.View animation="bounceIn" easing={"ease-in"} duration={1000} delay={delay + 300}>
+                <TextInput
+                    style={[ styles.input, Common.basicShadow ]}
+                    onChangeText={onChangeText}
+                    onEndEditing={onEndEditing}
+                    enabled={enabled}
+                    secureTextEntry={secureTextEntry}
+                />
+            </Animatable.View>
+            
         </View>
     )
 }

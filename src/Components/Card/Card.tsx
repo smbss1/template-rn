@@ -1,14 +1,13 @@
 import React from 'react'
-import { ImageBackground, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import dayjs from 'dayjs';
 import updateLocale from 'dayjs/plugin/updateLocale'
 import french from 'dayjs/locale/fr'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
-import * as Animatable from 'react-native-animatable'
 
 import { News } from '@/Models';
 import styles from './CardStyles'
-import { navigate } from '@/Navigators/Root';
+import { SharedElement } from 'react-navigation-shared-element';
 
 
 dayjs.extend(updateLocale)
@@ -21,7 +20,7 @@ dayjs.updateLocale('fr', {
 interface Props
 {
     news: News;
-    show_header?: boolean
+    show_header?: boolean,
 }
 
 const Card = ({ news, show_header }: Props) => {
@@ -29,42 +28,35 @@ const Card = ({ news, show_header }: Props) => {
     const { id, title, date, image } = news;
     const formatedDate = dayjs(date).locale(french).format("ddd D MMMM YYYY");
 
-    /**
-     * @brief When card is pressed, redirect the user to the details screen with news information
-     */
-    const onPressCard = () => {
-        navigate("NewsDetailsScreen", { newsInfo: news})
-    }
-
     return (
-        <TouchableOpacity onPress={onPressCard}>
-            <Animatable.View
-                style={styles.card}
-                animation="slideInLeft"
-                delay={100 + (id - 1) * 100}
-            >
-                <ImageBackground source={{uri: image }} style={styles.image}>
-    
-                    {/* Background Color Overlay */}
-                    <View style={styles.overlay} />
+        <View style={styles.card} key={id}>
+            <SharedElement id={`${id}.image`} style={StyleSheet.absoluteFill}>
+                <Image style={styles.image} source={{uri: image}} resizeMode='cover'/>
+            </SharedElement>
 
-                    {/* Title */}
-                    <Text style={styles.title}>
-                        {title}
-                    </Text>
+            <SharedElement id={`${id}.overlay`} style={StyleSheet.absoluteFill}>
+                <View style={styles.overlay} />
+            </SharedElement>
 
-                    {/* Date Header */}
-                    { show_header &&
-                        <View style={styles.dateContainer}>
-                            <View style={styles.dateBackground} />
+            { show_header &&
+                <SharedElement id={`${id}.date`}>
+                    <View style={styles.dateContainer}>
+                        <View style={styles.dateBackground} />
+
                             <Text style={styles.date}>
                                 {formatedDate}
                             </Text>
-                        </View>
-                    }
-                </ImageBackground>
-            </Animatable.View>
-        </TouchableOpacity>
+
+                    </View>
+                </SharedElement>
+            }
+
+            <SharedElement id={`${id}.title`} style={StyleSheet.absoluteFill}>
+                <Text style={styles.title}>
+                    {title}
+                </Text>
+            </SharedElement>
+        </View>
     )
 }
 

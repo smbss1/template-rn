@@ -1,6 +1,6 @@
 import React, { Dispatch } from 'react'
-import { View, Text, Image, RefreshControl } from 'react-native'
-import { Common, Images } from '@/Theme'
+import { View, RefreshControl } from 'react-native'
+import { Common } from '@/Theme'
 import styles from './NewsScreenStyles'
 import { useTranslation } from 'react-i18next'
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler'
@@ -10,6 +10,9 @@ import { getNews } from '@/ActionCreators/NewsActionCreator'
 import EncryptedStorage from 'react-native-encrypted-storage';
 import { logout } from '@/ActionCreators/AuthActionCreator'
 import { NavHeader, Card } from '@/Components'
+import { News } from '@/Models'
+import { navigate, navigationRef } from '@/Navigators/Root'
+import * as Animatable from 'react-native-animatable'
 
 const NewsScreen = (props: any) => {
 
@@ -28,8 +31,18 @@ const NewsScreen = (props: any) => {
 
     const { t } = useTranslation();
 
-    const onRefresh = React.useCallback(async () => {
+    const [isRefreshing, setRefresh] = React.useState(false)
+
+    React.useEffect(() => {
+        console.log("jlnk")
+        setRefresh(news.isLoading)
+    }, [news.isLoading]);
+
+    const onRefresh = React.useCallback(() => {
+        console.log("knkn")
         // Because we login, we can get the news from API
+
+        setRefresh(true)
         dispatchGetNews();
     }, []);
 
@@ -42,9 +55,26 @@ const NewsScreen = (props: any) => {
                 dispatchLogout();
             });
     }
+
+    /**
+     * @brief When card is pressed, redirect the user to the details screen with news information
+     */
+     const onPressCard = (news: News) => {
+        navigate("NewsDetailsScreen", { newsInfo: news})
+    }
+
+    const renderItem = (item: News) => {
+        return (
+            <Animatable.View animation={"fadeIn"} delay={ item.id * 200 }>
+                <TouchableOpacity onPress={() => onPressCard(item)}>
+                    <Card news={item} show_header={true} />
+                </TouchableOpacity>
+            </Animatable.View>
+        )
+    }
     
     return (
-        <View style={[Common.basicPage]}>
+        <View style={[Common.basicPage, { alignItems: 'center' }]}>
 
             {/* Nav Header */}
             <NavHeader title={t('home.news')} onPressBack={onPressBack}/>
@@ -55,10 +85,12 @@ const NewsScreen = (props: any) => {
                     contentContainerStyle={{ paddingBottom: 30 }}
                     data={news.news}
                     keyExtractor={(item) => { return item.id.toString(); }}
-                    renderItem={({item}) => (
-                        <Card news={item} show_header={true} />
-                    )}
-                    refreshControl={<RefreshControl refreshing={news.isLoading} onRefresh={onRefresh} />}
+                    collapsable={false}
+                    renderItem={({item}) => renderItem(item)}
+                    showsVerticalScrollIndicator={false}
+                    refreshControl={
+                        <RefreshControl refreshing={news.isLoading} onRefresh={onRefresh} />
+                    }
                 />
             </View>
         </View>

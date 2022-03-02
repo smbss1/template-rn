@@ -3,6 +3,7 @@ const type = {
     bold: 'Roboto-Bold',
     light: 'Roboto-Light',
     medium: 'Roboto-Medium',
+    italic: 'Roboto-Italic',
 }
 
 const size = {

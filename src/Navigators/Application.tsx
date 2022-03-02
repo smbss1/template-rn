@@ -1,8 +1,7 @@
 import React from 'react'
-import { createStackNavigator } from '@react-navigation/stack'
 import { NavigationContainer } from '@react-navigation/native'
 import { navigationRef } from '@/Navigators/Root'
-import { StatusBar, Text, View } from 'react-native'
+import { StatusBar, View } from 'react-native'
 import Layout from '@/Theme/Layout'
 import MainNavigator from '@/Navigators/Main'
 import NewsNavigator from '@/Navigators/News'
@@ -10,9 +9,20 @@ import Toast from 'react-native-toast-message'
 import ToastConfig from '@/Config/Toast'
 import { connect } from 'react-redux'
 import { StoreState } from '@/Store/configureStore'
+import { createSharedElementStackNavigator } from 'react-navigation-shared-element'
+import { StackNavigationOptions } from '@react-navigation/stack'
 
-const Stack = createStackNavigator()
+const Stack = createSharedElementStackNavigator()
 
+const options: StackNavigationOptions = {
+    cardStyleInterpolator: ({ current: { progress } }) => {
+        return {
+            cardStyle: {
+                opacity: progress
+            }
+        };
+    }
+};
 
 const ApplicationNavigator = (props: any) => {
     const { token } = props;
@@ -27,18 +37,14 @@ const ApplicationNavigator = (props: any) => {
                     <Stack.Screen
                         name="Main"
                         component={MainNavigator}
-                        options={{
-                            animationEnabled: false,
-                        }}
+                        options={() => options}
                     />
                     :
                     // User is login
                     <Stack.Screen
                         name="News"
                         component={NewsNavigator}
-                        options={{
-                            animationEnabled: false,
-                        }}
+                        options={() => options}
                     />
                 }
                 </Stack.Navigator>

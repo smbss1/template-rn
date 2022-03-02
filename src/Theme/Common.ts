@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import { Metrics } from '@/Theme'
+import Metrics from '@/Theme/Metrics'
 import { Colors } from '@/Theme/Variables'
 
 const Common = {

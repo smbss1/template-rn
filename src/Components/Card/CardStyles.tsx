@@ -8,18 +8,14 @@ export default StyleSheet.create({
         width: Metrics.widthPercentageToDP('90%'),
         height: Metrics.heightPercentageToDP('27%'),
         marginTop: 20,
-        borderRadius: 10,
-        backgroundColor: Colors.primary
     },
     image: {
-        flex: 1,
-        alignSelf: 'stretch',
-        resizeMode: 'cover',
+        ...StyleSheet.absoluteFillObject,
         borderRadius: 10,
+        resizeMode: 'cover'
     },
     overlay: {
-        flex: 1,
-        resizeMode: 'stretch',
+        ...StyleSheet.absoluteFillObject,
         backgroundColor:'#1741658E',
         borderRadius: 10,
     },

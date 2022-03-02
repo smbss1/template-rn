@@ -5,9 +5,8 @@ import Fonts from '@/Theme/FontsTypes'
 
 export default StyleSheet.create({
     headerContainer: {
-        // width: Metrics.heightPercentageToDP("100%"),
+        width: '100%',
         flexDirection: 'row',
-        // backgroundColor: 'white',
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingHorizontal: 10,
@@ -21,4 +20,7 @@ export default StyleSheet.create({
         textAlign: 'center',
         color: Colors.text,
     },
+    arrow: {
+        
+    }
 })
