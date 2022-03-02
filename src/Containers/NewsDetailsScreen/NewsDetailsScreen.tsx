@@ -67,27 +67,29 @@ const NewsDetailsScreen = (props: any) => {
                 <View style={styles.container}>
 
                     {/* Date */}
-                    <Text style={styles.date}>
+                    <Animatable.Text style={styles.date} animation="fadeInUp">
                         {formatedDate}
-                    </Text>
+                    </Animatable.Text>
 
                     {/* Share Button */}
-                    <ShareButton fontSize={16} />
+                    <Animatable.View animation="fadeIn" delay={200}>
+                        <ShareButton fontSize={16} />
+                    </Animatable.View>
                 </View>
 
                 
                 <View style={styles.bodyContainer}>
                     {/* Title Body */}
-                    <View style={styles.bodyTitleContainer}>
+                    <Animatable.View style={styles.bodyTitleContainer} animation="fadeInUp" delay={200}>
                         <Text style={styles.bodyTitle}>
                             {"Lorem ipsum dolor sit amet, consetetur sadipscing elitr"}
                         </Text>
-                    </View>
+                    </Animatable.View>
 
                     {/* Text Body */}
-                    <Text style={styles.text}>
+                    <Animatable.Text style={styles.text} animation="fadeInUp" delay={400}>
                         {`${newsInfo.body}`}
-                    </Text>
+                    </Animatable.Text>
                 </View>
                 <View style={{
                     marginTop: 34,

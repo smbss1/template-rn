@@ -31,18 +31,7 @@ const NewsScreen = (props: any) => {
 
     const { t } = useTranslation();
 
-    const [isRefreshing, setRefresh] = React.useState(false)
-
-    React.useEffect(() => {
-        console.log("jlnk")
-        setRefresh(news.isLoading)
-    }, [news.isLoading]);
-
     const onRefresh = React.useCallback(() => {
-        console.log("knkn")
-        // Because we login, we can get the news from API
-
-        setRefresh(true)
         dispatchGetNews();
     }, []);
 

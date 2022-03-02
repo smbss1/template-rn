@@ -1,11 +1,11 @@
-import React, { Dispatch, useEffect, useRef } from 'react'
-import { View, Text, Image, ActivityIndicator, TextInputProps } from 'react-native'
+import React, { Dispatch, ReactNode, useEffect, useRef } from 'react'
+import { View, Image, ActivityIndicator, TextInputProps, StyleSheet } from 'react-native'
 import { Common, Images } from '@/Theme'
 import styles from './LoginScreenStyles'
 import animations from './LoginScreenAnimation'
-import { BasicButton } from '@/Components'
+import { BasicButton, Field } from '@/Components'
 import { useTranslation } from 'react-i18next'
-import { TextInput } from 'react-native-gesture-handler'
+import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import Tools from '@/Tools/Tools'
 import { connect } from "react-redux";
 import { StoreState } from '@/Store/configureStore'
@@ -53,6 +53,7 @@ const LoginScreen = (props: any) => {
     const [email, onChangeEmail] = React.useState("");
     const [password, onChangePassword] = React.useState("");
     const [inputError, setError] = React.useState(false);
+    const [hidePassword, setHidePassword] = React.useState(true);
 
 
     /**
@@ -110,6 +111,7 @@ const LoginScreen = (props: any) => {
                             delay={animations.DURATION}
                             autoCompleteType={'email'}
                             keyboardType={'email-address'}
+                            returnKeyType = {"next"}
                         />
                         
                         {/* Password Input */}
@@ -119,11 +121,30 @@ const LoginScreen = (props: any) => {
                             onChangeText={onChangePassword}
                             enabled={!isLoading}
                             delay={animations.DURATION * 2}
-                            secureTextEntry={true}
-                        />
+                            secureTextEntry={hidePassword}
+                            returnKeyType = {"next"}
+
+                        >
+                            {/* Hide/Show password button */}
+                            <TouchableOpacity
+                                onPress={() => {setHidePassword(!hidePassword)}}
+                                style={{ height: 25, width: 33 }}
+                                containerStyle={{ position: 'absolute', right: 15 }}
+                            >
+                                <Animatable.Image animation="fadeIn" delay={animations.DURATION + 1500}
+                                    source={hidePassword ? Images.invisibleText : Images.visibleText}
+                                    style={{ ...StyleSheet.absoluteFillObject, resizeMode: 'cover' }}
+                                />
+                            </TouchableOpacity>
+                        </Field>
                     </View>
 
-                    <Animatable.View style={styles.buttonContainer} animation={animations.connectBtn} duration={1000} delay={animations.DURATION * 2 + 300}>
+                    <Animatable.View
+                        style={styles.buttonContainer}
+                        animation={animations.connectBtn}
+                        duration={1000}
+                        delay={animations.DURATION * 2 + 300}
+                    >
                         { isLoading ?
                             <ActivityIndicator color={Colors.primary} size={50} />
                             :
@@ -139,47 +160,6 @@ const LoginScreen = (props: any) => {
         </View>
     );
 }
-
-interface FieldProp extends TextInputProps
-{
-    title?: string;
-    containerStyle: any;
-    enabled?: boolean;
-    delay: number;
-}
-
-const Field = (props: FieldProp) => {
-
-    const {
-        title,
-        containerStyle,
-        onChangeText,
-        onEndEditing,
-        enabled,
-        delay,
-        secureTextEntry
-    } = props;
-
-    return (
-        <View style={containerStyle}>
-            <Animatable.Text style={styles.sectionTitle} animation={animations.inputTitle} duration={600} delay={delay}>
-                {title}
-            </Animatable.Text>
-
-            <Animatable.View animation="bounceIn" easing={"ease-in"} duration={1000} delay={delay + 300}>
-                <TextInput
-                    style={[ styles.input, Common.basicShadow ]}
-                    onChangeText={onChangeText}
-                    onEndEditing={onEndEditing}
-                    enabled={enabled}
-                    secureTextEntry={secureTextEntry}
-                />
-            </Animatable.View>
-            
-        </View>
-    )
-}
-
 
 const mapStateToProps = (state: StoreState) => {
     return state.auth;

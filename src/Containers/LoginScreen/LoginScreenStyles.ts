@@ -4,14 +4,6 @@ import { Colors } from '@/Theme/Variables'
 import Fonts from '@/Theme/FontsTypes'
 
 export default StyleSheet.create({
-    input: {
-        height: Metrics.buttonHeight,
-        backgroundColor: Colors.white,
-        paddingLeft: 20,
-        borderRadius: Metrics.buttonRadius,
-        fontSize: 16,
-        fontFamily: Fonts.type.light
-    },
     contentContainer: {
         width: Metrics.widthPercentageToDP('100%'),
         height: Metrics.heightPercentageToDP('80%'),
@@ -57,23 +49,6 @@ export default StyleSheet.create({
     passwordContainer: {
         marginTop: 24,
     },
-    sectionTitle: {
-        fontFamily: Fonts.type.medium,
-        fontSize: 14,
-        color: Colors.text,
-        opacity: 0.4,
-        marginBottom: 10,
-    },
-    forgetPasswordContainer: {
-        paddingLeft: 11,
-        paddingTop: 9,
-        paddingBottom: 19,
-    },
-    forgetPasswordText: {
-        fontSize: 14,
-        fontFamily: Fonts.type.light,
-        color: Colors.primary,
-    },
     noAccountText: {
         marginTop: 8,
         marginBottom: 8,
@@ -83,11 +58,5 @@ export default StyleSheet.create({
         fontFamily: Fonts.type.base,
         color: Colors.text,
         opacity: 0.7,
-    },
-    errorContainer: {
-        marginTop: 3
-    },
-    errorMessage: {
-        color: Colors.error
     },
 })

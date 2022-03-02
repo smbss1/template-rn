@@ -12,6 +12,7 @@ const Images = {
     leftArrow: require('@/Assets/Images/Icons/Basic/left-arrow.png'),
     simpleGreenCheck: require('@/Assets/Images/Icons/Basic/simple-green-check.png'),
     visibleText: require('@/Assets/Images/Icons/Basic/visible-text.png'),
+    invisibleText: require('@/Assets/Images/Icons/Basic/invisible-text.png'),
     cross: require('@/Assets/Images/Icons/Basic/cross.png'),
     alert: require('@/Assets/Images/Icons/Basic/alert.png'),
     greenCheck: require('@/Assets/Images/Icons/Basic/green-check.png'),
