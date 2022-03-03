@@ -16,7 +16,6 @@ interface registerResponse {
 
 export async function fetchRegister(params: Object): Promise<registerResponse> {
     const response = await api.post('auth/register', params)
-
     return response
 }
 

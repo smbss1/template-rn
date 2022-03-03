@@ -1,15 +1,15 @@
-import React, { Dispatch, ReactNode, useEffect, useRef } from 'react'
-import { View, Image, ActivityIndicator, TextInputProps, StyleSheet, Text } from 'react-native'
+import React, { createRef, Dispatch, useEffect } from 'react'
+import { View, Image, ActivityIndicator } from 'react-native'
 import { Common, Images } from '@/Theme'
 import styles from './RegisterScreenStyles'
-import animations from './RegisterScreenAnimation'
+import animations, { FieldAnimation } from './RegisterScreenAnimation'
 import { BasicButton, Field } from '@/Components'
 import { useTranslation } from 'react-i18next'
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import Tools from '@/Tools/Tools'
 import { connect } from "react-redux";
 import { StoreState } from '@/Store/configureStore'
-import { register, resetAuthError } from '@/ActionCreators/AuthActionCreator'
+import { register, resetAuthState } from '@/ActionCreators/AuthActionCreator'
 import * as Animatable from 'react-native-animatable'
 import Toast from 'react-native-toast-message'
 import { Colors } from '@/Theme'
@@ -21,16 +21,25 @@ const RegisterScreen = (props: any) => {
         isLoading,
         error,
         dispatchRegister,
-        dispatchResetAuthError
+        dispatchResetAuthState,
+        registerSuccess
     } = props;
 
-    // Run this, only when the component is mounted
     useEffect(() => {
-        if (!isLoading && !error && email && password)
+        // If Register Success, show a Toast and redirect to login screen
+        // TODO: Auto login the user
+        if (registerSuccess)
         {
-            console.log("Register Success")
+            Toast.show({
+                type: 'success',
+                text1: t('authentification.register_success'),
+                onHide: () => {
+                    navigateAndSimpleReset('LoginScreen')
+                }
+            })
+            dispatchResetAuthState()
         }
-    }, [isLoading])
+    }, [registerSuccess])
 
     useEffect(() => {
         // Show the error message, only when we get one
@@ -41,16 +50,22 @@ const RegisterScreen = (props: any) => {
                 text1: t('authentification.register_error'),
                 text2: t('authentification.account_exist')
             })
-            dispatchResetAuthError()
+            dispatchResetAuthState()
         }
     }, [error])
 
     const { t } = useTranslation();
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
+    const [confirmPassword, setConfirmPassword] = React.useState("");
     const [inputEmailError, setInputEmailError] = React.useState(false);
     const [inputPasswordError, setInputPasswordError] = React.useState(false);
+    const [inputConfirmPasswordError, setInputConfirmPasswordError] = React.useState(false);
     const [hidePassword, setHidePassword] = React.useState(true);
+
+    const emailAnimationRef = createRef<any>()
+    const passwordAnimationRef = createRef<any>()
+    const confirmPasswordAnimationRef = createRef<any>()
 
     /**
      * @brief Check the syntax of the email when the user is typing
@@ -69,6 +84,14 @@ const RegisterScreen = (props: any) => {
     }
 
     /**
+     * @brief Check the input of the password when the user finishes typing
+     */
+     const onChangeConfirmPassword = (text: string) => {    
+        setInputConfirmPasswordError(password !== text);
+        setConfirmPassword(text);
+    }
+
+    /**
      * @brief Show a Toast Error if the email is incorrect
      */
     const onEndEditingEmail = () => {    
@@ -79,6 +102,11 @@ const RegisterScreen = (props: any) => {
                 text1: t('verification.email_title'),
                 text2: t('verification.check_email'),
             });
+            emailAnimationRef.current?.animate(FieldAnimation.fieldAnimationError, 300);
+        }
+        else
+        {
+            emailAnimationRef.current?.animate(FieldAnimation.fieldAnimationResetError, 300);
         }
     }
 
@@ -93,8 +121,33 @@ const RegisterScreen = (props: any) => {
                 text1: t('verification.password_title'),
                 text2: t('verification.password_minimums'),
             });
+            passwordAnimationRef.current?.animate(FieldAnimation.fieldAnimationError, 300);
+        }
+        else
+        {
+            passwordAnimationRef.current?.animate(FieldAnimation.fieldAnimationResetError, 300);
         }
     }
+
+    /**
+     * @brief Show a Toast Error if the password is incorrect
+     */
+     const onEndEditingConfirmPassword = () => {    
+        if (inputConfirmPasswordError)
+        {
+            Toast.show({
+                type: 'error',
+                text1: t('verification.confirm_password_error'),
+                text2: t('verification.confirm_password_msg')
+            });
+            confirmPasswordAnimationRef.current?.animate(FieldAnimation.fieldAnimationError, 300);
+        }
+        else
+        {
+            confirmPasswordAnimationRef.current?.animate(FieldAnimation.fieldAnimationResetError, 300);
+        }
+    }
+
 
     /**
      * @brief This function is called when we press on the register button.
@@ -110,6 +163,16 @@ const RegisterScreen = (props: any) => {
      */
      const onPressIHaveAccount = () => {
         navigateAndSimpleReset("LoginScreen")
+    }
+
+    const disableButtonIf = () : boolean => {
+        return (inputEmailError
+            || inputPasswordError
+            || inputConfirmPasswordError
+            || !email
+            || !password
+            || !confirmPassword
+        )
     }
 
     return (
@@ -138,7 +201,7 @@ const RegisterScreen = (props: any) => {
                             delay={animations.DURATION}
                             autoCompleteType={'email'}
                             keyboardType={'email-address'}
-                            returnKeyType = {"next"}
+                            animationRef={emailAnimationRef}
                         />
                         
                         {/* Password Input */}
@@ -149,8 +212,7 @@ const RegisterScreen = (props: any) => {
                             onEndEditing={onEndEditingPassword}
                             delay={animations.DURATION * 2}
                             secureTextEntry={hidePassword}
-                            returnKeyType = {"next"}
-
+                            animationRef={passwordAnimationRef}
                         >
                             {/* Hide/Show password button */}
                             <TouchableOpacity
@@ -164,8 +226,20 @@ const RegisterScreen = (props: any) => {
                                 />
                             </TouchableOpacity>
                         </Field>
+
+                        {/* Confirm Password Input */}
+                        <Field
+                            title={t('authentification.confirm_password')}
+                            containerStyle={styles.passwordContainer}
+                            onChangeText={onChangeConfirmPassword}
+                            onEndEditing={onEndEditingConfirmPassword}
+                            delay={animations.DURATION * 3}
+                            secureTextEntry={true}
+                            animationRef={confirmPasswordAnimationRef}
+                        />
                     </View>
 
+                    {/* Have Account Text */}
                     <TouchableOpacity onPress={onPressIHaveAccount}>
                         <Animatable.Text
                             style={styles.haveAccountText}
@@ -174,6 +248,7 @@ const RegisterScreen = (props: any) => {
                         </Animatable.Text>
                     </TouchableOpacity>
 
+                    {/* Register Button */}
                     <Animatable.View
                         style={styles.buttonContainer}
                         animation={animations.connectBtn}
@@ -184,7 +259,7 @@ const RegisterScreen = (props: any) => {
                             <ActivityIndicator color={Colors.primary} size={50} />
                             :
                             <BasicButton
-                                disabled={inputEmailError || inputPasswordError || !email || !password}
+                                disabled={disableButtonIf()}
                                 text={t('authentification.signUp')}
                                 onPress={onClickToRegister}
                             />
@@ -203,7 +278,7 @@ const mapStateToProps = (state: StoreState) => {
 const mapDispatchToProps = (dispatch: Dispatch<any>) => {
     return {
         dispatchRegister: (email: string, password: string) => dispatch(register(email, password)),
-        dispatchResetAuthError: () => dispatch(resetAuthError()),
+        dispatchResetAuthState: () => dispatch(resetAuthState()),
     };
 };
 

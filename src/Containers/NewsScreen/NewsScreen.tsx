@@ -11,10 +11,9 @@ import EncryptedStorage from 'react-native-encrypted-storage';
 import { logout } from '@/ActionCreators/AuthActionCreator'
 import { NavHeader, Card } from '@/Components'
 import { News } from '@/Models'
-import { navigate, navigationRef } from '@/Navigators/Root'
+import { navigate } from '@/Navigators/Root'
 import * as Animatable from 'react-native-animatable'
 import Lottie from 'lottie-react-native'
-import animations from './NewsScreenAnimations'
 
 const NewsScreen = (props: any) => {
 

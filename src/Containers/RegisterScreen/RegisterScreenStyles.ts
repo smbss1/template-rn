@@ -15,10 +15,10 @@ export default StyleSheet.create({
         bottom: 0,
     },
     fieldContainer: {
-        paddingBottom: Metrics.heightPercentageToDP('6%'),
+        paddingBottom: Metrics.heightPercentageToDP('4%'),
     },
     buttonContainer: {
-        paddingTop: Metrics.heightPercentageToDP('3%'),
+        paddingTop: Metrics.heightPercentageToDP('2%'),
     },
     content: {
         width: '100%',
@@ -44,14 +44,14 @@ export default StyleSheet.create({
         paddingTop: Metrics.heightPercentageToDP('3%'),
     },
     mailContainer: {
-        marginTop: 37,
+        marginTop: 0,
     },
     passwordContainer: {
-        marginTop: 24,
+        marginTop: 20,
     },
     haveAccountText: {
-        marginTop: Metrics.heightPercentageToDP('3%'),
-        marginBottom: 8,
+        // marginTop: Metrics.heightPercentageToDP('3%'),
+        marginBottom: 5,
         width: '100%',
         textAlign: 'center',
         fontSize: 19,

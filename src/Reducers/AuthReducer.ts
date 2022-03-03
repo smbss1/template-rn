@@ -6,6 +6,8 @@ export interface AuthState {
     error?: any
     token?: string
     refreshToken?: string
+
+    registerSuccess?: boolean
 }
 
 const initialState: AuthState = {
@@ -13,13 +15,13 @@ const initialState: AuthState = {
     error: null,
     token: undefined,
     refreshToken: undefined,
+    registerSuccess: undefined,
 }
 
 export default function authReducer(
     state: AuthState = initialState,
     action: actions.AuthActions,
 ): AuthState {
-
     switch (action.type) {
     case actions.LOGOUT:
         return {
@@ -54,11 +56,13 @@ export default function authReducer(
         return {
             isLoading: false,
             error: null,
+            registerSuccess: true
         }
     case actions.REGISTER_FAILURE:
         return {
             isLoading: false,
             error: action.error,
+            registerSuccess: false
         }
     case actions.REFRESH_TOKEN:
         return {
@@ -77,11 +81,8 @@ export default function authReducer(
             isLoading: false,
             error: action.error,
         }
-    case actions.RESET_AUTH_ERROR:
-        return {
-            isLoading: false,
-            error: null,
-        }
+    case actions.RESET_AUTH:
+        return initialState
     default:
         return state
     }

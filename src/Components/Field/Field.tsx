@@ -1,9 +1,9 @@
 import React, { ReactNode } from 'react'
-import { TextInput, TextInputProps, View } from 'react-native';
+import { TextInput, TextInputProps, View, ViewProps, ViewStyle } from 'react-native';
 import * as Animatable from 'react-native-animatable'
 
 import styles from './FieldStyles'
-import { Common } from '@/Theme';
+import { Common, Colors } from '@/Theme';
 
 const inputTitle = {
     0: {
@@ -31,6 +31,7 @@ interface Props extends TextInputProps
     enabled?: boolean;
     delay: number;
     children?: ReactNode
+    animationRef?: React.MutableRefObject<React.ClassicComponent<Animatable.AnimatableProperties<ViewStyle> & ViewProps, any>>
 }
 
 const Field = (props: Props) => {
@@ -45,7 +46,8 @@ const Field = (props: Props) => {
         children,
         autoCompleteType,
         keyboardType,
-        returnKeyType
+        returnKeyType,
+        animationRef
     } = props;
 
     return (
@@ -60,7 +62,8 @@ const Field = (props: Props) => {
             </Animatable.Text>
 
             <Animatable.View
-                animation="bounceIn"
+                ref={animationRef}
+                animation={"bounceIn"}
                 easing={"ease-in"}
                 duration={1000}
                 delay={delay + 300}

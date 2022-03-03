@@ -35,7 +35,7 @@ function* registerCall({
         password: password,
     }
     try {
-        yield call(fetchRegister, params)
+        const { data } = yield call(fetchRegister, params)
 
         yield put(actionCreators.registerSuccess())
     } catch (error) {
@@ -74,7 +74,7 @@ function* refreshTokenCall({
 
 function* watchOnAuth() {
     yield takeEvery(actionTypes.LOGIN, loginCall)
-    yield takeEvery(actionTypes.REGISTER, registerCall)
+    yield takeLatest(actionTypes.REGISTER, registerCall)
     yield takeLatest(actionTypes.REFRESH_TOKEN, refreshTokenCall)
 }
 

@@ -1,11 +1,8 @@
-import { StyleSheet } from 'react-native'
-import Metrics from '@/Theme/Metrics'
-import { Colors } from '@/Theme/Variables'
-import Fonts from '@/Theme/FontsTypes'
+export { default as FieldAnimation } from '@/Components/Field/FieldAnimation'
 
 const DURATION = 400;
 
-const connectBtn = {
+const btnEntryAnimation = {
     0: {
         transform: [
             {
@@ -25,6 +22,6 @@ const connectBtn = {
 };
 
 export default {
-    connectBtn,
+    btnEntryAnimation,
     DURATION
 }

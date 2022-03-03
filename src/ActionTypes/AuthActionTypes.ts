@@ -1,4 +1,3 @@
-import { User } from '@/Models'
 
 export const LOGOUT = 'AuthActionTypes/LOGOUT'
 export interface LogoutAction {
@@ -62,9 +61,9 @@ export interface RefreshTokenFailureAction {
     error: Error | string
 }
 
-export const RESET_AUTH_ERROR = 'AuthActionTypes/RESET_AUTH_ERROR'
-export interface ResetAuthErrorAction {
-    type: typeof RESET_AUTH_ERROR
+export const RESET_AUTH = 'AuthActionTypes/RESET_AUTH'
+export interface ResetAuthAction {
+    type: typeof RESET_AUTH
 }
 
 export type AuthActions =
@@ -78,4 +77,4 @@ export type AuthActions =
     | RefreshTokenAction
     | RefreshTokenSuccessAction
     | RefreshTokenFailureAction
-    | ResetAuthErrorAction
+    | ResetAuthAction
